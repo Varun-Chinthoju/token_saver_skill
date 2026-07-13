@@ -1,0 +1,7 @@
+description = "Clean up Repomix and RTK configurations and files in this repository"
+prompt = """
+Invoke the token-saver skill.
+Autonomously run the cleanup script in the plugin's directory:
+1. Locate the `token-saver` skill file `skills/token-saver/SKILL.md` in the plugin directory to find the plugin root directory.
+2. Run `node <plugin-root>/bin/cleanup.js --agent antigravity`.
+"""
