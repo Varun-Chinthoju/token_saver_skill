@@ -21,6 +21,10 @@ To clean up:
 ```bash
 npx token-saver-cleanup [options]
 ```
+To view token gains:
+```bash
+npx token-saver-gains
+```
 
 #### Supported Options
 *   `--agent <name>`: Target agent to initialize RTK for. Possible values: `antigravity`, `cursor`, `windsurf`, `cline`, `kilocode`, `pi`, `hermes`, `claude`.
@@ -51,3 +55,10 @@ The agent will autonomously run `bin/cleanup.js --agent antigravity` which:
 2. Removes Repomix-specific instructions from `AGENTS.md` (and deletes `AGENTS.md` if it becomes empty).
 3. Reverts the Husky pre-commit hook changes.
 4. Uninstalls RTK hooks and configurations (`rtk init --uninstall`).
+
+### `/token-saver:gains`
+The agent will autonomously run `bin/gains.js` which:
+1. Inspects the current Repomix output in the workspace.
+2. Compares the size of the packed output to the uncompressed raw codebase files to calculate Repomix filtering and compression gains.
+3. Queries RTK historical logs (`rtk gain`) for both project-specific and global CLI proxy token savings.
+4. Summarizes and prints individual and total token and cost savings.

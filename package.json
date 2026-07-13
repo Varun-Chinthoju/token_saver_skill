@@ -5,11 +5,13 @@
   "main": "bin/setup.js",
   "bin": {
     "token-saver-setup": "./bin/setup.js",
-    "token-saver-cleanup": "./bin/cleanup.js"
+    "token-saver-cleanup": "./bin/cleanup.js",
+    "token-saver-gains": "./bin/gains.js"
   },
   "scripts": {
     "setup": "node bin/setup.js",
     "cleanup": "node bin/cleanup.js",
+    "gains": "node bin/gains.js",
     "prepare": "husky"
   },
   "keywords": [
@@ -24,5 +26,8 @@
   "license": "MIT",
   "devDependencies": {
     "husky": "^9.1.7"
+  },
+  "dependencies": {
+    "js-tiktoken": "^1.0.21"
   }
 }
