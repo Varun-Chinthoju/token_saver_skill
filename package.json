@@ -1,0 +1,24 @@
+{
+  "name": "repomix-skill",
+  "version": "1.0.0",
+  "description": "An Antigravity skill that automates the installation, configuration, and cleanup of Repomix to optimize AI token usage.",
+  "main": "bin/setup.js",
+  "bin": {
+    "repomix-skill-setup": "./bin/setup.js",
+    "repomix-skill-cleanup": "./bin/cleanup.js"
+  },
+  "scripts": {
+    "setup": "node bin/setup.js",
+    "cleanup": "node bin/cleanup.js"
+  },
+  "keywords": [
+    "antigravity",
+    "repomix",
+    "claude-code",
+    "cursor",
+    "copilot",
+    "tokens"
+  ],
+  "author": "",
+  "license": "MIT"
+}
