@@ -6,7 +6,7 @@ const { execSync } = require('child_process');
 
 const targetDir = process.cwd();
 
-console.log('🚀 Starting Repomix setup...');
+console.log('🚀 Starting Repomix & RTK setup...');
 
 // Helper to run commands
 function runCmd(cmd) {
@@ -15,6 +15,26 @@ function runCmd(cmd) {
   } catch (err) {
     console.error(`❌ Failed to run command: ${cmd}`);
     process.exit(1);
+  }
+}
+
+// Parse arguments
+const args = process.argv.slice(2);
+let agent = null;
+let isCodex = false;
+let isGemini = false;
+let isGlobal = false;
+
+for (let i = 0; i < args.length; i++) {
+  const arg = args[i];
+  if (arg === '--agent' && i + 1 < args.length) {
+    agent = args[++i];
+  } else if (arg === '--codex') {
+    isCodex = true;
+  } else if (arg === '--gemini') {
+    isGemini = true;
+  } else if (arg === '--global' || arg === '-g') {
+    isGlobal = true;
   }
 }
 
@@ -189,12 +209,95 @@ git add repomix-output.md
 `;
 
 fs.writeFileSync(huskyHookPath, preCommitContent);
-// Make pre-commit executable
 try {
   fs.chmodSync(huskyHookPath, '755');
-} catch (e) {
-  // Ignore permission error if not on Unix-like
-}
+} catch (e) {}
 console.log('✅ Configured Husky pre-commit hook');
 
-console.log('🎉 Repomix setup complete! You are ready to go.');
+// 6. Install & Configure RTK
+console.log('🚀 Checking for RTK...');
+
+function getRtkCommand() {
+  try {
+    execSync('rtk --version', { stdio: 'ignore' });
+    return 'rtk';
+  } catch (e) {
+    const homeDir = process.env.HOME || process.env.USERPROFILE || '';
+    const localRtk = path.join(homeDir, '.local', 'bin', 'rtk');
+    if (fs.existsSync(localRtk)) {
+      return localRtk;
+    }
+    return null;
+  }
+}
+
+let rtkCmd = getRtkCommand();
+
+if (!rtkCmd) {
+  console.log('📦 RTK is not installed. Installing RTK...');
+  const isWin = process.platform === 'win32';
+  if (isWin) {
+    try {
+      execSync('cargo --version', { stdio: 'ignore' });
+      console.log('🦀 Installing RTK via Cargo...');
+      runCmd('cargo install --git https://github.com/rtk-ai/rtk');
+    } catch (e) {
+      console.warn('⚠️ Cargo not found. Please install RTK manually on Windows. Refer to https://github.com/rtk-ai/rtk.');
+    }
+  } else {
+    let hasBrew = false;
+    try {
+      execSync('brew --version', { stdio: 'ignore' });
+      hasBrew = true;
+    } catch (e) {}
+
+    if (hasBrew) {
+      console.log('🍺 Installing RTK via Homebrew...');
+      runCmd('brew install rtk');
+    } else {
+      console.log('🌐 Installing RTK via Quick Install script...');
+      runCmd('curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh');
+    }
+  }
+  
+  rtkCmd = getRtkCommand();
+}
+
+if (rtkCmd) {
+  console.log(`✅ RTK is available at: ${rtkCmd}`);
+  
+  // Build rtk init arguments
+  let rtkArgs = ['init'];
+  const globalRequiredAgents = ['cursor', 'windsurf', 'pi'];
+  const isDefaultClaude = !agent && !isCodex && !isGemini;
+  const useGlobal = isGlobal || isDefaultClaude || (agent && globalRequiredAgents.includes(agent.toLowerCase()));
+
+  if (useGlobal) {
+    rtkArgs.push('-g');
+  }
+  if (isCodex) {
+    rtkArgs.push('--codex');
+  }
+  if (isGemini) {
+    rtkArgs.push('--gemini');
+  }
+  if (agent) {
+    rtkArgs.push('--agent', agent);
+  }
+
+  // Workaround for RTK 0.43.0 bug: create .agents/rules directory before running rtk init for antigravity
+  if (agent && agent.toLowerCase() === 'antigravity') {
+    const rulesDir = path.join(targetDir, '.agents', 'rules');
+    if (!fs.existsSync(rulesDir)) {
+      fs.mkdirSync(rulesDir, { recursive: true });
+      console.log('✅ Pre-created .agents/rules/ directory to prevent RTK write error.');
+    }
+  }
+
+  console.log(`🔧 Initializing RTK with arguments: ${rtkArgs.join(' ')}...`);
+  runCmd(`"${rtkCmd}" ${rtkArgs.join(' ')}`);
+} else {
+  console.log('⚠️ Skip RTK initialization as RTK could not be installed.');
+}
+
+console.log('🎉 Setup complete! Repomix and RTK are now configured.');

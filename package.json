@@ -9,7 +9,8 @@
   },
   "scripts": {
     "setup": "node bin/setup.js",
-    "cleanup": "node bin/cleanup.js"
+    "cleanup": "node bin/cleanup.js",
+    "prepare": "husky"
   },
   "keywords": [
     "antigravity",
@@ -20,5 +21,8 @@
     "tokens"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
 }

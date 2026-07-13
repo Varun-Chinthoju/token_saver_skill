@@ -1,6 +1,6 @@
-# Repomix Companion Skill
+# Repomix & RTK Companion Skill
 
-A cross-tool companion that completely automates the installation, configuration, and cleanup of [Repomix](https://repomix.com/) in your repositories to optimize AI token usage. Works with **Antigravity (AGY)**, **Claude Code**, and **Cursor / Copilot (Codex)**.
+A cross-tool companion that completely automates the installation, configuration, and cleanup of both [Repomix](https://repomix.com/) and [RTK (Rust Token Killer)](https://github.com/rtk-ai/rtk) in your repositories to optimize AI token usage. Works with **Antigravity (AGY)**, **Claude Code**, and **Cursor / Copilot (Codex)**.
 
 ## Installation
 
@@ -15,18 +15,20 @@ To use it inside other AI environments without installing AGY, you can run the s
 
 Run via `npx` (once published):
 ```bash
-npx repomix-skill-setup
+npx repomix-skill-setup [options]
 ```
 To clean up:
 ```bash
-npx repomix-skill-cleanup
+npx repomix-skill-cleanup [options]
 ```
 
-Alternatively, you can copy the `bin/setup.js` and `bin/cleanup.js` scripts directly to your local project and run them via Node:
-```bash
-node setup.js
-node cleanup.js
-```
+#### Supported Options
+*   `--agent <name>`: Target agent to initialize RTK for. Possible values: `antigravity`, `cursor`, `windsurf`, `cline`, `kilocode`, `pi`, `hermes`, `claude`.
+*   `--codex`: Target Codex CLI (uses `AGENTS.md` + `RTK.md`, no Claude hook patching).
+*   `--gemini`: Initialize for Gemini CLI.
+*   `-g` / `--global`: Enforce global hook setup for RTK where applicable.
+
+If no flags are specified, it defaults to standard Claude Code / Copilot setup (`rtk init -g`).
 
 ---
 
@@ -35,15 +37,17 @@ node cleanup.js
 Once installed in AGY, the following commands are available:
 
 ### `/repomix:setup`
-The agent will autonomously run `bin/setup.js` which:
+The agent will autonomously run `bin/setup.js --agent antigravity` which:
 1. Installs Repomix globally (`npm install -g repomix`).
 2. Generates an optimized `repomix.config.json` in the root.
 3. Scans your stack (e.g. Python, Go, Rust, Node) and generates a tailored `.repomixignore` file.
 4. Creates or updates `AGENTS.md` to instruct AI assistants to read the Repomix output before viewing individual source files.
 5. Installs Husky and registers a `pre-commit` hook to automatically compile the repository context to `repomix-output.md` on git commit.
+6. Installs **RTK (Rust Token Killer)** and runs `rtk init --agent antigravity` to inject token-optimized CLI rewrites into AGY.
 
 ### `/repomix:cleanup`
-The agent will autonomously run `bin/cleanup.js` which:
+The agent will autonomously run `bin/cleanup.js --agent antigravity` which:
 1. Deletes the generated Repomix configuration, ignore files, and output markdown files.
 2. Removes Repomix-specific instructions from `AGENTS.md` (and deletes `AGENTS.md` if it becomes empty).
 3. Reverts the Husky pre-commit hook changes.
+4. Uninstalls RTK hooks and configurations (`rtk init --uninstall`).
