@@ -1,5 +1,5 @@
 {
-  "name": "token-saver-skill",
+  "name": "token-saver",
   "version": "1.0.0",
   "description": "An Antigravity skill that automates the installation, configuration, and cleanup of Repomix and RTK to optimize AI token usage.",
   "main": "bin/setup.js",
