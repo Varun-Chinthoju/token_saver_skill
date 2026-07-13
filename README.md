@@ -1,4 +1,4 @@
-# Repomix & RTK Companion Skill
+# Token Saver Companion Skill
 
 A cross-tool companion that completely automates the installation, configuration, and cleanup of both [Repomix](https://repomix.com/) and [RTK (Rust Token Killer)](https://github.com/rtk-ai/rtk) in your repositories to optimize AI token usage. Works with **Antigravity (AGY)**, **Claude Code**, and **Cursor / Copilot (Codex)**.
 
@@ -7,7 +7,7 @@ A cross-tool companion that completely automates the installation, configuration
 ### 1. Antigravity (AGY)
 To install this globally as an AGY plugin:
 ```bash
-agy plugin install https://github.com/Varun-Chinthoju/repomix_skill
+agy plugin install https://github.com/Varun-Chinthoju/token_saver_skill
 ```
 
 ### 2. Claude Code & Codex (Cursor / Copilot)
@@ -15,11 +15,11 @@ To use it inside other AI environments without installing AGY, you can run the s
 
 Run via `npx` (once published):
 ```bash
-npx repomix-skill-setup [options]
+npx token-saver-setup [options]
 ```
 To clean up:
 ```bash
-npx repomix-skill-cleanup [options]
+npx token-saver-cleanup [options]
 ```
 
 #### Supported Options
@@ -36,7 +36,7 @@ If no flags are specified, it defaults to standard Claude Code / Copilot setup (
 
 Once installed in AGY, the following commands are available:
 
-### `/repomix:setup`
+### `/token-saver:setup`
 The agent will autonomously run `bin/setup.js --agent antigravity` which:
 1. Installs Repomix globally (`npm install -g repomix`).
 2. Generates an optimized `repomix.config.json` in the root.
@@ -45,7 +45,7 @@ The agent will autonomously run `bin/setup.js --agent antigravity` which:
 5. Installs Husky and registers a `pre-commit` hook to automatically compile the repository context to `repomix-output.md` on git commit.
 6. Installs **RTK (Rust Token Killer)** and runs `rtk init --agent antigravity` to inject token-optimized CLI rewrites into AGY.
 
-### `/repomix:cleanup`
+### `/token-saver:cleanup`
 The agent will autonomously run `bin/cleanup.js --agent antigravity` which:
 1. Deletes the generated Repomix configuration, ignore files, and output markdown files.
 2. Removes Repomix-specific instructions from `AGENTS.md` (and deletes `AGENTS.md` if it becomes empty).

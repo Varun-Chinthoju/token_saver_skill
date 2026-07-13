@@ -1,11 +1,11 @@
 {
-  "name": "repomix-skill",
+  "name": "token-saver-skill",
   "version": "1.0.0",
-  "description": "An Antigravity skill that automates the installation, configuration, and cleanup of Repomix to optimize AI token usage.",
+  "description": "An Antigravity skill that automates the installation, configuration, and cleanup of Repomix and RTK to optimize AI token usage.",
   "main": "bin/setup.js",
   "bin": {
-    "repomix-skill-setup": "./bin/setup.js",
-    "repomix-skill-cleanup": "./bin/cleanup.js"
+    "token-saver-setup": "./bin/setup.js",
+    "token-saver-cleanup": "./bin/cleanup.js"
   },
   "scripts": {
     "setup": "node bin/setup.js",
