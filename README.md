@@ -2,76 +2,127 @@
 
 A cross-tool companion that completely automates the installation, configuration, and cleanup of both [Repomix](https://repomix.com/) and [RTK (Rust Token Killer)](https://github.com/rtk-ai/rtk) in your repositories to optimize AI token usage. Works with **Antigravity (AGY)**, **Claude Code**, and **Cursor / Copilot (Codex)**.
 
-## Installation
+## Installation & Usage by Coding Agent
 
 ### 1. Antigravity (AGY)
-To install this globally as an AGY plugin:
+To install globally as an AGY plugin:
 ```bash
 agy plugin install https://github.com/Varun-Chinthoju/token_saver_skill
 ```
+Once installed, the agent will autonomously run the setup, cleanup, and gains scripts via AGY Slash Commands:
+* `/token-saver:setup`
+* `/token-saver:cleanup`
+* `/token-saver:gains`
 
-### 2. Claude Code & Codex (Cursor / Copilot)
-To use it inside other AI environments without installing AGY, you can run the setup/cleanup script directly using `npx` (directly from GitHub or via npm registry if published) or by cloning the repository and running the scripts locally.
+---
 
-#### Option A: Run directly from GitHub via `npx` (No install required)
-You can execute the setup, cleanup, or gains script directly from the GitHub repository:
+### 2. Claude Code
+Initialize Repomix and RTK global hooks tailored for Claude Code.
 
-To set up:
+* **Set up:**
+  ```bash
+  # Directly via npx (from GitHub):
+  npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-setup --agent claude -g
+
+  # Via npm (once published):
+  npx --package=token-saver token-saver-setup --agent claude -g
+
+  # Via local clone:
+  node bin/setup.js --agent claude -g
+  ```
+* **Clean up:**
+  ```bash
+  # Directly via npx (from GitHub):
+  npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-cleanup --agent claude -g
+
+  # Via npm (once published):
+  npx --package=token-saver token-saver-cleanup --agent claude -g
+
+  # Via local clone:
+  node bin/cleanup.js --agent claude -g
+  ```
+
+---
+
+### 3. Codex CLI
+Set up local workspace optimizations and RTK instructions (`AGENTS.md` and `RTK.md`) for the Codex CLI.
+
+* **Set up:**
+  ```bash
+  # Directly via npx (from GitHub):
+  npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-setup --codex
+
+  # Via npm (once published):
+  npx --package=token-saver token-saver-setup --codex
+
+  # Via local clone:
+  node bin/setup.js --codex
+  ```
+* **Clean up:**
+  ```bash
+  # Directly via npx (from GitHub):
+  npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-cleanup --codex
+
+  # Via npm (once published):
+  npx --package=token-saver token-saver-cleanup --codex
+
+  # Via local clone:
+  node bin/cleanup.js --codex
+  ```
+
+---
+
+### 4. Editors (Cursor, Copilot, Windsurf, Cline)
+Configure RTK and workspace instructions for your preferred editor/agent. Replace `[agent]` with `cursor`, `windsurf`, or `cline`.
+
+* **Set up:**
+  ```bash
+  # Directly via npx (from GitHub):
+  npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-setup --agent [agent]
+
+  # Via npm (once published):
+  npx --package=token-saver token-saver-setup --agent [agent]
+
+  # Via local clone:
+  node bin/setup.js --agent [agent]
+  ```
+* **Clean up:**
+  ```bash
+  # Directly via npx (from GitHub):
+  npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-cleanup --agent [agent]
+
+  # Via npm (once published):
+  npx --package=token-saver token-saver-cleanup --agent [agent]
+
+  # Via local clone:
+  node bin/cleanup.js --agent [agent]
+  ```
+
+---
+
+### 📊 Checking Token Gains (All Non-AGY Agents)
+To inspect the current packed sizes and query RTK historical log savings:
 ```bash
-npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-setup [options]
-```
-To clean up:
-```bash
-npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-cleanup [options]
-```
-To view token gains:
-```bash
+# Directly via npx (from GitHub):
 npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-gains
-```
 
-#### Option B: Run via npm registry `npx` (once published)
-Since the package is named `token-saver`, use the `--package` flag to specify it:
-
-To set up:
-```bash
-npx --package=token-saver token-saver-setup [options]
-```
-To clean up:
-```bash
-npx --package=token-saver token-saver-cleanup [options]
-```
-To view token gains:
-```bash
+# Via npm (once published):
 npx --package=token-saver token-saver-gains
-```
 
-#### Option C: Clone and Run Locally
-If you want to run the scripts from a local clone of the repository:
-```bash
-# Clone the repository
-git clone https://github.com/Varun-Chinthoju/token_saver_skill.git
-cd token_saver_skill
-
-# Install dependencies
-npm install
-
-# Run setup
-node bin/setup.js [options]
-
-# Run cleanup (when needed)
-node bin/cleanup.js [options]
-
-# View token gains
+# Via local clone:
 node bin/gains.js
 ```
 
-#### Supported Options
+---
+
+### Supported Options
 *   `--agent <name>`: Target agent to initialize RTK for. Possible values: `antigravity`, `cursor`, `windsurf`, `cline`, `kilocode`, `pi`, `hermes`, `claude`.
 *   `--codex`: Target Codex CLI (uses `AGENTS.md` + `RTK.md`, no Claude hook patching).
 *   `--gemini`: Initialize for Gemini CLI.
 *   `-g` / `--global`: Enforce global hook setup for RTK where applicable.
 
 If no flags are specified, it defaults to standard Claude Code / Copilot setup (`rtk init -g`).
+
 
 
 ---
