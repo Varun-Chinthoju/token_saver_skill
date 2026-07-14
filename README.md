@@ -11,19 +11,58 @@ agy plugin install https://github.com/Varun-Chinthoju/token_saver_skill
 ```
 
 ### 2. Claude Code & Codex (Cursor / Copilot)
-To use it inside other AI environments without installing AGY, you can run the setup/cleanup script directly using `npx` (if published to npm) or by cloning the repository and running the scripts.
+To use it inside other AI environments without installing AGY, you can run the setup/cleanup script directly using `npx` (directly from GitHub or via npm registry if published) or by cloning the repository and running the scripts locally.
 
-Run via `npx` (once published):
+#### Option A: Run directly from GitHub via `npx` (No install required)
+You can execute the setup, cleanup, or gains script directly from the GitHub repository:
+
+To set up:
 ```bash
-npx token-saver-setup [options]
+npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-setup [options]
 ```
 To clean up:
 ```bash
-npx token-saver-cleanup [options]
+npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-cleanup [options]
 ```
 To view token gains:
 ```bash
-npx token-saver-gains
+npx --package=github:Varun-Chinthoju/token_saver_skill token-saver-gains
+```
+
+#### Option B: Run via npm registry `npx` (once published)
+Since the package is named `token-saver`, use the `--package` flag to specify it:
+
+To set up:
+```bash
+npx --package=token-saver token-saver-setup [options]
+```
+To clean up:
+```bash
+npx --package=token-saver token-saver-cleanup [options]
+```
+To view token gains:
+```bash
+npx --package=token-saver token-saver-gains
+```
+
+#### Option C: Clone and Run Locally
+If you want to run the scripts from a local clone of the repository:
+```bash
+# Clone the repository
+git clone https://github.com/Varun-Chinthoju/token_saver_skill.git
+cd token_saver_skill
+
+# Install dependencies
+npm install
+
+# Run setup
+node bin/setup.js [options]
+
+# Run cleanup (when needed)
+node bin/cleanup.js [options]
+
+# View token gains
+node bin/gains.js
 ```
 
 #### Supported Options
@@ -33,6 +72,7 @@ npx token-saver-gains
 *   `-g` / `--global`: Enforce global hook setup for RTK where applicable.
 
 If no flags are specified, it defaults to standard Claude Code / Copilot setup (`rtk init -g`).
+
 
 ---
 
